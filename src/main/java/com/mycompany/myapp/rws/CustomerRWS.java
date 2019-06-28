@@ -7,12 +7,16 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mycompany.myapp.domain.CustomerDTO;
 import com.mycompany.myapp.service.CustomerService;
+
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 public class CustomerRWS {
@@ -22,12 +26,29 @@ public class CustomerRWS {
 	@Autowired
 	CustomerService custormerService;
 	
-	@RequestMapping(value = "/customers", method = RequestMethod.GET)
+	@ApiOperation(value = "Find One customer")
+	@GetMapping(value = "/customers/{id}")
+    public ResponseEntity<CustomerDTO> findOne(@PathVariable(value = "id") String id) 
+	{
+		logger.info("Listing one customer");
+		return new ResponseEntity<CustomerDTO>(custormerService.findOne(Integer.parseInt(id)), HttpStatus.OK);
+    }
+	
+	@ApiOperation(value = "Find All customers")
+	@GetMapping(value = "/customers")
 	public ResponseEntity<List<CustomerDTO>> findAll()
 	{
-		logger.info("Listing all addresses");
+		logger.info("Listing all customers");
 		return new ResponseEntity<List<CustomerDTO>>(custormerService.getAll(), HttpStatus.OK);
 	}
+	
+	@ApiOperation(value = "Add a customer")
+    @PostMapping(value = "/customers/add", produces = "application/json")
+    public ResponseEntity save(@RequestBody CustomerDTO customerDTO)
+    {
+		custormerService.save(customerDTO);
+        return new ResponseEntity("Customer saved successfully", HttpStatus.CREATED);
+    }
 
 
 }

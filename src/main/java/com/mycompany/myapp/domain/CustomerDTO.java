@@ -13,6 +13,13 @@ public class CustomerDTO
 	public CustomerDTO() 
 	{		
 	}
+	
+	public CustomerDTO(String id, String name, String phone) 
+	{
+		this.id = id;
+		this.name = name;
+		this.phone = phone;		
+	}
 
 	public CustomerDTO(String id, String name, String phone, String state, String country, String countryCode, String number) 
 	{

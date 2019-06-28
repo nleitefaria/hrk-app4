@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.mycompany.myapp.domain.CustomerDTO;
 import com.mycompany.myapp.entity.Customer;
@@ -20,8 +21,12 @@ public class CustomerServiceImpl implements CustomerService {
 	
 	@Autowired
 	PhoneDataService phoneDataService;
+	
+	public CustomerDTO findOne(Integer id) {
+		Customer customer = customerReppository.findOne(id);
+		return fromCustomer(customer);
+	}
 
-	@Override
 	public List<CustomerDTO> getAll() {
 		List<CustomerDTO> ret = new ArrayList<CustomerDTO>();
 		for (Customer customer : customerReppository.findAll()) {
@@ -30,14 +35,39 @@ public class CustomerServiceImpl implements CustomerService {
 		}
 		return ret;
 	}
+	
+	@Transactional
+	public Customer save(CustomerDTO customerDTO)
+	{
+		return customerReppository.save(new Customer(Integer.valueOf(customerDTO.getId()), customerDTO.getName(), customerDTO.getPhone()));	
+	}
 
-	private CustomerDTO fromCustomer(Customer customer) {
+	private CustomerDTO fromCustomer(Customer customer) 
+	{
 		CustomerDTO ret = null;
-		String state = phoneDataService.getState(customer.getPhone());
-		String[] phoneData = phoneDataService.splitFullPhoneNumber(customer.getPhone());
-		String countryCode = phoneData[0];
-		String number = phoneData[1];
-		String country = phoneDataService.getCountryByCountryCode(countryCode);
+		String[] phoneData = null;
+		String state = null;
+		String countryCode = null;
+		String number = null;
+		String country = null;
+		
+		if(customer.getPhone() != null)
+		{
+			state = phoneDataService.getState(customer.getPhone());
+			phoneData = phoneDataService.splitFullPhoneNumber(customer.getPhone());			
+		}	
+		
+		if(phoneData != null)
+		{
+			countryCode = phoneData[0];
+			number = phoneData[1];	
+		}
+		
+		if(countryCode != null)
+		{
+			country = phoneDataService.getCountryByCountryCode(countryCode);			
+		}
+					
 		ret = new CustomerDTO(customer.getId().toString(), customer.getName(), customer.getPhone(), state, country, countryCode, number);
 		return ret;
 	}
