@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,29 +19,36 @@ import com.mycompany.myapp.service.PhoneDataService;
 public class CustomerServiceImpl implements CustomerService {
 
 	@Autowired
-	CustomerRepository customerReppository;
+	CustomerRepository customerRepository;
 	
 	@Autowired
 	PhoneDataService phoneDataService;
 	
 	public CustomerDTO findOne(Integer id) {
-		Customer customer = customerReppository.findOne(id);
+		Customer customer = customerRepository.findOne(id);
 		return fromCustomer(customer);
 	}
 
 	public List<CustomerDTO> getAll() {
 		List<CustomerDTO> ret = new ArrayList<CustomerDTO>();
-		for (Customer customer : customerReppository.findAll()) {
+		for (Customer customer : customerRepository.findAll()) {
 			CustomerDTO customerDTO = fromCustomer(customer);
 			ret.add(customerDTO);
 		}
 		return ret;
 	}
 	
+	
+	public Page<CustomerDTO> findAllPaged(int page) 
+    {
+		return toPageObjectDto(customerRepository.findAll(null, (new PageRequest(page,10))));
+    }
+	
+		
 	@Transactional
 	public Customer save(CustomerDTO customerDTO)
 	{
-		return customerReppository.save(new Customer(Integer.valueOf(customerDTO.getId()), customerDTO.getName(), customerDTO.getPhone()));	
+		return customerRepository.save(new Customer(Integer.valueOf(customerDTO.getId()), customerDTO.getName(), customerDTO.getPhone()));	
 	}
 
 	private CustomerDTO fromCustomer(Customer customer) 
@@ -70,5 +79,15 @@ public class CustomerServiceImpl implements CustomerService {
 					
 		ret = new CustomerDTO(customer.getId().toString(), customer.getName(), customer.getPhone(), state, country, countryCode, number);
 		return ret;
+	}
+	
+	private Page<CustomerDTO> toPageObjectDto(Page<Customer> objects) {
+	    Page<CustomerDTO> dtos  = objects.map(this::convertToObjectDto);
+	    return dtos;
+	}
+
+	private CustomerDTO convertToObjectDto(Customer customer) {
+		CustomerDTO customerDTO = fromCustomer(customer);
+	    return customerDTO;
 	}
 }

@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,6 +41,14 @@ public class CustomerRWS {
 	{
 		logger.info("Listing all customers");
 		return new ResponseEntity<List<CustomerDTO>>(custormerService.getAll(), HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "Find All customers with paging")
+	@GetMapping(value = "/customers/page/{pageNum}")
+	public ResponseEntity<Page<CustomerDTO>> findAllPaged(@PathVariable Integer pageNum)
+	{
+		logger.info("Listing a page of customer" + pageNum);
+		return new ResponseEntity<Page<CustomerDTO>>(custormerService.findAllPaged(pageNum - 1), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "Add a customer")
