@@ -9,6 +9,7 @@ import com.mycompany.myapp.entity.Customer;
 
 public interface CustomerService
 {
+	Long count();
 	CustomerDTO findOne(Integer id);
 	List<CustomerDTO> getAll();
 	Page<CustomerDTO> findAllPaged(int page);
