@@ -24,6 +24,10 @@ public class CustomerServiceImpl implements CustomerService {
 	@Autowired
 	PhoneDataService phoneDataService;
 	
+	public Long count() {
+		return customerRepository.count();
+	}
+	
 	public CustomerDTO findOne(Integer id) {
 		Customer customer = customerRepository.findOne(id);
 		return fromCustomer(customer);

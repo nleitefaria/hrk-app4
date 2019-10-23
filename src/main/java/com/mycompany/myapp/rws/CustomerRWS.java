@@ -28,6 +28,14 @@ public class CustomerRWS {
 	CustomerService custormerService;
 	
 	@ApiOperation(value = "Find One customer")
+	@GetMapping(value = "/customers/count")
+    public ResponseEntity<Long> count() 
+	{
+		logger.info("Listing one customer");
+		return new ResponseEntity<Long>(custormerService.count(), HttpStatus.OK);
+    }
+	
+	@ApiOperation(value = "Find One customer")
 	@GetMapping(value = "/customers/{id}")
     public ResponseEntity<CustomerDTO> findOne(@PathVariable(value = "id") String id) 
 	{
