@@ -3,9 +3,12 @@ package com.mycompany.myapp.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,12 +45,10 @@ public class CustomerServiceImpl implements CustomerService {
 		return ret;
 	}
 	
-	
 	public Page<CustomerDTO> findAllPaged(int page) 
     {
-		return toPageObjectDto(customerRepository.findAll(null, (new PageRequest(page,10))));
+		return toPageObjectDto(customerRepository.findAll(new PageRequest(page, 10, Sort.Direction.DESC, "id")));
     }
-	
 		
 	@Transactional
 	public Customer save(CustomerDTO customerDTO)
