@@ -17,6 +17,7 @@ import com.mycompany.myapp.entity.Customer;
 import com.mycompany.myapp.repository.CustomerRepository;
 import com.mycompany.myapp.service.CustomerService;
 import com.mycompany.myapp.service.PhoneDataService;
+import com.mycompany.myapp.specs.CustomerSpecs;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -47,7 +48,12 @@ public class CustomerServiceImpl implements CustomerService {
 	
 	public Page<CustomerDTO> findAllPaged(int page) 
     {
-		return toPageObjectDto(customerRepository.findAll(new PageRequest(page, 10, Sort.Direction.DESC, "id")));
+		return toPageObjectDto(customerRepository.findAll(new PageRequest(page, 10, Sort.Direction.DESC, "id")));	
+	 }
+	
+	public Page<CustomerDTO> findAllPagedWithFilters(CustomerDTO customerDTO, int page) 
+    {
+		return toPageObjectDto(customerRepository.findAll(CustomerSpecs.buildSpecification(customerDTO), new PageRequest(page, 10, Sort.Direction.DESC, "id")));
     }
 		
 	@Transactional

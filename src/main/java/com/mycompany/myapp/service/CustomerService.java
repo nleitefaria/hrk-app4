@@ -13,6 +13,6 @@ public interface CustomerService
 	CustomerDTO findOne(Integer id);
 	List<CustomerDTO> getAll();
 	Page<CustomerDTO> findAllPaged(int page);
+	Page<CustomerDTO> findAllPagedWithFilters(CustomerDTO customerDTO, int page);
 	Customer save(CustomerDTO customerDTO);
-
 }
