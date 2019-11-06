@@ -14,6 +14,13 @@ public class CustomerDTO
 	{		
 	}
 	
+	public CustomerDTO(String name, String phone) 
+	{
+		this.name = name;
+		this.phone = phone;		
+	}
+
+	
 	public CustomerDTO(String id, String name, String phone) 
 	{
 		this.id = id;

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mycompany.myapp.domain.CustomerDTO;
@@ -57,6 +58,14 @@ public class CustomerRWS {
 	{
 		logger.info("Listing a page of customer" + pageNum);
 		return new ResponseEntity<Page<CustomerDTO>>(custormerService.findAllPaged(pageNum - 1), HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "Find All customers with paging and filters")
+	@GetMapping(value = "/customers/filter/page/{pageNum}")
+	public ResponseEntity<Page<CustomerDTO>> findAllPagedWithFilters(@PathVariable Integer pageNum, @RequestParam String name, @RequestParam String phone)
+	{
+		logger.info("Listing with filters a page of customer" + pageNum);
+		return new ResponseEntity<Page<CustomerDTO>>(custormerService.findAllPagedWithFilters(new CustomerDTO(name, phone), (pageNum - 1)), HttpStatus.OK);
 	}
 	
 	@ApiOperation(value = "Add a customer")
