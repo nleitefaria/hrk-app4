@@ -23,25 +23,22 @@ public abstract class CustomerSpecs {
 		{
 			if(customerDTO.getName().equals("") == false)
 			{
-				Specification<Customer> actorFirstNameIsLikeSpec = actorFirstNameIsLike(customerDTO.getName());
-				specs = specs.and(actorFirstNameIsLikeSpec);
+				Specification<Customer> customeNameIsLikeSpec = customeNameIsLike(customerDTO.getName());
+				specs = specs.and(customeNameIsLikeSpec);
 			}			
 		}
 		
-//		if(actorDTO.getLastName() != null)
-//		{
-//			if(actorDTO.getLastName().equals("") == false)
-//			{
-//				Specification<Actor> actorLastNameIsLikeSpec = actorLastNameIsLike(actorDTO.getLastName());
-//				specs = specs.and(actorLastNameIsLikeSpec);
-//			}			
-//		}
+		if(customerDTO.getPhone() != null)
+		{
+			if(customerDTO.getPhone().equals("") == false)
+			{
+				Specification<Customer> customePhoneIsLikeSpec = customePhoneIsLike(customerDTO.getPhone());
+				specs = specs.and(customePhoneIsLikeSpec);
+			}			
+		}
 		
 		return specs;
 	}
-	
-	
-	
 	
 	private static Specification<Customer> fetch() {
 		return new Specification<Customer>() {
@@ -51,7 +48,7 @@ public abstract class CustomerSpecs {
 		};
 	}
 	
-	private static Specification<Customer> actorFirstNameIsLike(final String name) 
+	private static Specification<Customer> customeNameIsLike(final String name) 
 	{
         return new Specification<Customer>() 
         {
@@ -61,8 +58,15 @@ public abstract class CustomerSpecs {
           }
         };
     }
-    
 	
-	
-
+	private static Specification<Customer> customePhoneIsLike(final String phone) 
+	{
+        return new Specification<Customer>() 
+        {
+          public Predicate toPredicate(Root<Customer> root, CriteriaQuery<?> query, CriteriaBuilder builder) 
+          {
+             return builder.like(builder.lower(root.get(Customer_.phone)), phone.toLowerCase());
+          }
+        };
+    }
 }
