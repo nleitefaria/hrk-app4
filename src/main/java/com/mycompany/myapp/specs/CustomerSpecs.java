@@ -23,8 +23,8 @@ public abstract class CustomerSpecs {
 		{
 			if(customerDTO.getName().equals("") == false)
 			{
-				Specification<Customer> customeNameIsLikeSpec = customeNameIsLike(customerDTO.getName());
-				specs = specs.and(customeNameIsLikeSpec);
+				Specification<Customer> customerNameIsLikeSpec = customerNameIsLike(customerDTO.getName());
+				specs = specs.and(customerNameIsLikeSpec);
 			}			
 		}
 		
@@ -32,8 +32,8 @@ public abstract class CustomerSpecs {
 		{
 			if(customerDTO.getPhone().equals("") == false)
 			{
-				Specification<Customer> customePhoneIsLikeSpec = customePhoneIsLike(customerDTO.getPhone());
-				specs = specs.and(customePhoneIsLikeSpec);
+				Specification<Customer> customerPhoneIsLikeSpec = customerPhoneIsLike(customerDTO.getPhone());
+				specs = specs.and(customerPhoneIsLikeSpec);
 			}			
 		}
 		
@@ -48,7 +48,7 @@ public abstract class CustomerSpecs {
 		};
 	}
 	
-	private static Specification<Customer> customeNameIsLike(final String name) 
+	private static Specification<Customer> customerNameIsLike(final String name) 
 	{
         return new Specification<Customer>() 
         {
@@ -59,7 +59,7 @@ public abstract class CustomerSpecs {
         };
     }
 	
-	private static Specification<Customer> customePhoneIsLike(final String phone) 
+	private static Specification<Customer> customerPhoneIsLike(final String phone) 
 	{
         return new Specification<Customer>() 
         {
